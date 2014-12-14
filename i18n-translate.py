@@ -6,7 +6,7 @@ import io
 
 
 class jsonTranslate:
-    def __init__(self, cmdArgs = True):
+    def __init__(self):
         self.original_data = {}
         self.gs = goslate.Goslate()            
 
@@ -61,7 +61,8 @@ class jsonTranslate:
             return input
 
 if __name__ == '__main__':
-    t = jsonTranslate(True)
+    t = jsonTranslate()
+
     parser = argparse.ArgumentParser()
 
     parser.add_argument("infile",  help="This is the input translation file.")
