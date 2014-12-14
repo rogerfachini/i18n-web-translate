@@ -3,30 +3,35 @@ import goslate
 import argparse
 from collections import OrderedDict
 import io
-
+import pprint
 
 class jsonTranslate:
     def __init__(self):
         self.original_data = {}
-        self.gs = goslate.Goslate()            
+        self.gs = goslate.Goslate()   
+        print "Created Google Translate object"  
+        
+    def prettyPrint(self, text):
+        for item in text:
+           pprint.pprint(dict(item))      
 
     def translate(self, inFile, inLang, outLang, outFile = None):
         with open(inFile, 'r') as f:
             original_data = json.load(f, object_pairs_hook=OrderedDict)
-
-            print "The input data is:"
-            print original_data
-
-            print "The translated data is:"
+            print "Original Data:"
+            self.prettyPrint(original_data)   
             translated_data = self.translate_recursive(
                 original_data, outLang, inLang, self.gs)
-            print translated_data
 
             unicode_data = self.byteify(translated_data)
+            print "Translated Data:"
+            self.prettyPrint(unicode_data) 
             return unicode_data
 
     def writeFile(self, unicode_data, fileName):
+        
         with io.open(fileName, 'w') as f:
+            print "Opened %s, writing data to it"%fileName
             # json.dump(translated_data, f, indent=args.indent, ensure_ascii=False)
             data = json.dumps(
                 unicode_data, indent=2, ensure_ascii=False).decode('utf8')
@@ -81,5 +86,4 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    print args
-    t.translate(args.infile,args.sourcelang ,args.targetlang)
+    print t.translate(args.infile,args.sourcelang ,args.targetlang)
